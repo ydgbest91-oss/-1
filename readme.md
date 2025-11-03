@@ -2,9 +2,102 @@
 
 ## BOM
 
-Here is the BOM for this project: [BOM Charybdis 4x6 Wireless](/docs/bom/readme.md)
+Here is the BOM for this project (outdated): [BOM Charybdis 4x6 Wireless](/docs/bom/readme.md)
 
 ![Wireless Keyboard](/docs/picture/wireless-charybdis.png)
+
+## Repository Structure
+
+```
+zmk-config-charybdis/
+├── config/                          # Main ZMK configuration directory
+│   ├── boards/                      # Shield board definitions
+│   │   └── shields/
+│   │       └── charybdis/           # Charybdis shield configuration
+│   │           ├── charybdis.dtsi          # Common device tree (keyboard layout, kscan)
+│   │           ├── charybdis_left.conf     # Left side Kconfig options
+│   │           ├── charybdis_left.overlay  # Left side device tree overlay
+│   │           ├── charybdis_right.conf    # Right side Kconfig options
+│   │           ├── charybdis_right.overlay # Right side device tree overlay (includes trackball)
+│   │           ├── Kconfig.defconfig       # Shield Kconfig definitions
+│   │           └── Kconfig.shield          # Shield Kconfig options
+│   ├── charybdis.conf               # Global ZMK configuration
+│   ├── charybdis.keymap             # Keymap definition file
+│   ├── charybdis.zmk.yml           # ZMK build configuration
+│   ├── info.json                    # Repository metadata
+│   └── west.yml                     # West manifest (see West.yml section below)
+├── docs/                            # Documentation
+│   ├── bom/                         # Bill of Materials
+│   │   └── readme.md
+│   ├── keymap/                      # Keymap documentation
+│   │   ├── config.yaml
+│   │   ├── keymap.svg               # Visual keymap representation
+│   │   ├── keymap.yaml
+│   │   └── render.sh                # Script to render keymap
+│   └── picture/                     # Images
+│       └── wireless-charybdis.png
+├── build.yaml                       # GitHub Actions build configuration
+└── readme.md                        # This file
+```
+
+### Key Files Explained
+
+- **`config/charybdis.keymap`**: Defines all key layers, behaviors, and bindings
+- **`config/charybdis.dtsi`**: Shared device tree definitions (keyboard matrix, kscan, layer definitions)
+- **`config/boards/shields/charybdis/charybdis_right.overlay`**: Right side specific configuration including PMW3610 trackball setup
+- **`config/boards/shields/charybdis/charybdis_left.overlay`**: Left side specific configuration
+- **`config/west.yml`**: Defines external dependencies (see West.yml section below)
+
+## West.yml Configuration
+
+The `config/west.yml` file defines the ZMK firmware dependencies and external modules used in this configuration.
+
+### Remotes Section
+
+```yaml
+remotes:
+  - name: zmkfirmware
+    url-base: https://github.com/zmkfirmware
+  - name: badjeff
+    url-base: https://github.com/badjeff
+```
+
+- **`zmkfirmware`**: The main ZMK firmware repository, containing the core ZMK application code
+- **`badjeff`**: Repository containing the PMW3610 trackball driver used for the Charybdis trackball
+
+### Projects Section
+
+```yaml
+projects:
+  - name: zmk
+    remote: zmkfirmware
+    revision: main
+    import: app/west.yml
+  - name: zmk-pmw3610-driver
+    remote: badjeff
+    revision: main
+```
+
+- **`zmk`**: 
+  - **Purpose**: Main ZMK firmware application
+  - **Source**: `zmkfirmware` remote
+  - **Version**: `main` branch
+  - **Import**: Includes additional dependencies from `app/west.yml` in the ZMK repository
+
+- **`zmk-pmw3610-driver`**:
+  - **Purpose**: PMW3610 trackball sensor driver for ZMK
+  - **Source**: `badjeff` remote
+  - **Version**: `main` branch
+  - **Note**: This driver provides device tree bindings and driver code for the PMW3610 trackball sensor used on the Charybdis right side
+
+### Self Section
+
+```yaml
+self:
+  path: config
+```
+
+- **`path: config`**: Tells west that this repository's configuration files are located in the `config/` directory
 
 ## Keymap
 
