@@ -106,3 +106,29 @@ Can be updated at [/config/charybdis.keymap](/config/charybdis.keymap) and rende
 Generated with [Keymap Drawer](https://github.com/caksoylar/keymap-drawer-web/)
 
 ![Keymap](/docs/keymap/keymap.svg)
+
+## ZMK Studio Support
+
+This configuration includes support for [ZMK Studio](https://zmk.dev/docs/features/studio), which allows you to interactively configure and test your keyboard layout.
+
+### Physical Layout Definition
+
+The physical layout for ZMK Studio is defined in [`config/boards/shields/charybdis/charybdis.dtsi`](/config/boards/shields/charybdis/charybdis.dtsi) in the `charybdis_6col_layout` section. This defines the physical key positions, sizes, and rotations needed for the visual representation in ZMK Studio.
+
+### Enabling/Disabling ZMK Studio
+
+ZMK Studio support is enabled by default via the build configuration in [`build.yaml`](/build.yaml). The right side shield configuration includes:
+
+```yaml
+snippet: studio-rpc-usb-uart
+cmake-args: -DCONFIG_ZMK_STUDIO=y
+```
+
+To disable ZMK Studio support, comment out these two lines (lines 7-8) in `build.yaml`:
+
+```yaml
+- board: nice_nano_v2
+  shield: charybdis_right
+  # snippet: studio-rpc-usb-uart
+  # cmake-args: -DCONFIG_ZMK_STUDIO=y
+```
