@@ -12,6 +12,7 @@ bootloader/
 tools/
 zmk-pmw3610-driver/
 prospector-zmk-module/
+zmk-dongle-display/
 
 # Python
 __pycache__/
