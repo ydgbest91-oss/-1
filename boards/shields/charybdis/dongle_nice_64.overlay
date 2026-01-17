@@ -1,10 +1,14 @@
 /* boards/shields/charybdis/dongle_nice_64.overlay */
 #include "dongle_nice_common.dtsi"
 
-/* ▼ 핵심: "이 oled가 바로 메인 화면입니다"라고 지정하는 부분 (이게 없어서 에러 남!) */
-/ {
+/* ▼ chosen 설정: display + USB console/log-uart 지정 */
+ / {
     chosen {
         zephyr,display = &oled;
+
+        /* USB logging을 위해 콘솔을 CDC ACM(USB 시리얼)로 지정 */
+        zephyr,console = &cdc_acm_uart0;
+        zephyr,log-uart = &cdc_acm_uart0;
     };
 };
 
@@ -38,12 +42,12 @@
         reg = <0x3c>;
         width = <128>;
         height = <64>;
-        
+
         /* 화면 위치 보정 (지지직거리면 0, 밀리면 2) */
         segment-offset = <2>;
         page-offset = <0>;
         display-offset = <0>;
-        
+
         multiplex-ratio = <63>;
         segment-remap;
         com-invdir;
